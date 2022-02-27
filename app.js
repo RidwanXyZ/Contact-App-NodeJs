@@ -1,16 +1,45 @@
+const yargs = require('yargs')
 const kontak = require ('./lib/func.js')
 
-const main = async () => {
-  const nama = await kontak.tanya('Nama: ')
-  const email = await kontak.tanya('Email: ')
-  const hp = await kontak.tanya('Nomor hp: ')
-  
-  //save
 
-  kontak.simpan(nama, email, hp)
-}
+yargs.command({
+  command: 'add',
+  describe: 'Menambahkan kontak baru',
+  builder: {
+    nama: {
+      describe: "Nama lengkap",
+      demandOption: true,
+      type: 'string',
+    },
+     email: {
+      describe: "Email mu",
+      demandOption: false,
+      type: 'string',
+   },
+   nohp: {
+     describe: "Nomor hp",
+     demandOption: true,
+     type: 'string'
+   }
+  },
+  handler(argv){
+     kontak.simpan(argv.nama, argv.email, argv.nohp)
+  }
+}).demandCommand();
 
-main()
+//To display all name & mobile phone from contacts.JSON
+yargs.command({
+  command: 'list',
+  describe: 'Unuk menampilkan list kontak!',
+  handler(){
+    kontak.displayj()
+  },
+})
+
+
+
+
+yargs.parse()
 
 
 
